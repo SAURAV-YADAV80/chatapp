@@ -19,7 +19,7 @@ function* handleSignUp(action: PayloadAction<SignUpPayload>): Generator {
   try {
     console.log('SignUp Action:', action.payload)
     const res = yield call(signUpAPI, action.payload)
-    yield put(signUpSuccess(res))
+    yield put(signUpSuccess(res.user))
     localStorage.setItem('token', res.token)
     localStorage.setItem('user', JSON.stringify(res.user))
     toast.success('Signup successful 🎉')
@@ -33,7 +33,7 @@ function* handleLogin(action: PayloadAction<LoginPayload>): Generator {
   try {
     console.log('Login Action:', action.payload)
     const res = yield call(loginAPI, action.payload)
-    yield put(loginSuccess(res))
+    yield put(loginSuccess(res.user))
     localStorage.setItem('token', res.token)
     localStorage.setItem('user', JSON.stringify(res.user))
     toast.success('Login successful 👏')

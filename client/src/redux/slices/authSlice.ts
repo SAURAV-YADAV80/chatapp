@@ -4,17 +4,18 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 interface AuthState {
   user: null | { name: string; email: string }
   loading: boolean
-  token: string | null
   error: string | null
+  friends: string[]
+  friend_requests: string[]
 }
 const storedUser = localStorage.getItem('user')
-const storedToken = localStorage.getItem('token')
 
 const initialState: AuthState = {
   user: storedUser ? JSON.parse(storedUser) : null,
-  token: storedToken ? JSON.parse(storedToken) : null,
   loading: false,
   error: null,
+  friend_requests:[],
+  friends: [],
 }
 
 const authSlice = createSlice({
