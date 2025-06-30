@@ -1,12 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
+interface User {
+  _id: string
+  name: string
+  email: string
+  friends: string[]
+  friend_requests_sent: string[]
+  friend_requests_received: string[]
+}
+
 interface AuthState {
-  user: null | { name: string; email: string }
+  user: null | User
   loading: boolean
   error: string | null
-  friends: string[]
-  friend_requests: string[]
 }
 const storedUser = localStorage.getItem('user')
 
@@ -14,8 +21,6 @@ const initialState: AuthState = {
   user: storedUser ? JSON.parse(storedUser) : null,
   loading: false,
   error: null,
-  friend_requests:[],
-  friends: [],
 }
 
 const authSlice = createSlice({
@@ -26,7 +31,7 @@ const authSlice = createSlice({
       state.loading = true
       state.error = null
     },
-    signUpSuccess(state, action: PayloadAction<{ name: string; email: string }>) {
+    signUpSuccess(state, action: PayloadAction<User>) {
       state.user = action.payload
       state.loading = false
     },
@@ -39,7 +44,7 @@ const authSlice = createSlice({
       state.loading = true
       state.error = null
     },
-    loginSuccess(state, action: PayloadAction<{ name: string; email: string }>) {
+    loginSuccess(state, action: PayloadAction<User>) {
       state.user = action.payload
       state.loading = false
     },
@@ -58,6 +63,20 @@ const authSlice = createSlice({
       state.loading = false
       state.error = action.payload
     },
+    fetchCurrentUserRequest(state) {
+      state.loading = true
+      state.error = null
+    },
+    fetchCurrentUserSuccess(state, action: PayloadAction<User>) {
+      state.user = action.payload
+      state.loading = false
+    },
+    fetchCurrentUserFailure(state, action: PayloadAction<string>) {
+      state.error = action.payload
+      state.loading = false
+    },
+
+
 
   },
 })
@@ -72,6 +91,9 @@ export const {
   logoutRequest,
   logoutSuccess,
   logoutFailure,
+  fetchCurrentUserRequest,
+  fetchCurrentUserSuccess,
+  fetchCurrentUserFailure,
 } = authSlice.actions
 
 export default authSlice.reducer
